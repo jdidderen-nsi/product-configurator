@@ -199,7 +199,10 @@ class ProductConfigWebsiteSale(WebsiteSale):
             if isinstance(value, tuple):
                 value = value[0]
             if isinstance(value, list):
-                value = value[0][2]
+                if len(value):
+                    value = value[0][2]
+                else:
+                    value = None
             new_values[key] = value
         return new_values
 

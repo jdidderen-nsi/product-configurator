@@ -339,6 +339,7 @@
                     t-att-class="'datetimepicker-input product_config_datetimepicker form-control custom_config_value' + (' required_config_attrib' if (custom_value or not line.value_ids) and line.required else '')"
                     t-att-value="custom_value.value"
                     t-att-data-target="'#datetime-%s%s' % (custom_field_prefix, line.attribute_id.id)"
+                    data-widget="datetime-picker" data-widget-type="datetime"
                 />
                 <div
                     class="input-group-append"
@@ -637,7 +638,7 @@
     <template id="cfg_product" name="Product" track="1">
         <t
             t-set="combination_info"
-            t-value="product._get_combination_info(product_id=product_variant.id, add_qty=add_qty or 1, pricelist=pricelist)"
+            t-value="product._get_combination_info(product_id=product_variant.id, add_qty=add_qty or 1)"
         />
         <t t-call="website.layout">
             <t t-set="additional_title" t-value="product.name" />
@@ -651,7 +652,6 @@
                     t-attf-class="container py-2 oe_website_sale #{'discount' if combination_info['has_discounted_price'] else ''}"
                     id="product_detail"
                     t-att-data-view-track="view_track and '1' or '0'"
-                    t-att-data-product-tracking-info="json.dumps(request.env['product.template'].get_google_analytics_data(combination_info))"
                 >
                     <div class="row">
                         <div class="col-md-4">
@@ -684,10 +684,8 @@
                     >
                         <div class="col-md-6 col-xl-8">
                             <t t-call="website_sale.shop_product_carousel">
-                                <t
-                                    t-set="product_images"
-                                    t-value="product_variant._get_images() if product_variant else product._get_images()"
-                                />
+                                <t t-set="product_images" t-value="product_variant._get_images() if product_variant else product._get_images()"/>
+                                <t t-set="ribbon" t-value="product_variant.sudo().ribbon_id or product.sudo().website_ribbon_id"/>
                             </t>
                         </div>
                         <div class="col-md-6 col-xl-4" id="product_details">
